@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark Theme by Default - Karma Design System */
+    --background: 240 40% 4%; /* #05060A - Deep Void */
+    --foreground: 0 0% 98%;
+
+    --card: 240 30% 8%; /* #0E0F19 */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 30% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 265 89% 65%; /* #8B5CF6 - Neon Violet */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 84% 39%; /* #10B981 - Neon Emerald */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 20% 12%;
+    --muted-foreground: 240 5% 60%;
+
+    --accent: 265 89% 65%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 20% 12%;
+    --input: 240 20% 12%;
+    --ring: 265 89% 65%;
+
+    --radius: 1rem;
+
+    /* Chart Colors */
+    --chart-1: 265 89% 65%;
+    --chart-2: 160 84% 39%;
+    --chart-3: 190 90% 50%;
+    --chart-4: 45 90% 60%;
+    --chart-5: 0 84% 60%; 
+  }
+
+  .dark {
+    /* Enforcing the same deep theme */
+    --background: 240 40% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 30% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 30% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 265 89% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 20% 12%;
+    --muted-foreground: 240 5% 60%;
+    --accent: 265 89% 65%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 20% 12%;
+    --input: 240 20% 12%;
+    --ring: 265 89% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", system-ui, sans-serif;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 20%);
+    background-attachment: fixed;
+  }
+
+  /* Custom Scrollbar for cleaner look */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-md border border-white/5 shadow-xl;
+  }
+  .glass-panel {
+    @apply bg-[#1A1B26]/80 backdrop-blur-lg border border-white/10;
+  }
+  .text-glow {
+    text-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+  }
+}

@@ -1,0 +1,9 @@
+﻿
+> mocha-app@0.0.0 build
+> tsc -b && vite build
+
+src/react-app/pages/FoundItems.tsx(6,1): error TS6192: All imports in import declaration are unused.
+src/react-app/pages/FoundItems.tsx(40,9): error TS6133: 'navigate' is declared but its value is never read.
+error TS2688: Cannot find type definition file for './worker-configuration.d.ts'.
+  The file is in the program because:
+    Entry point of type library './worker-configuration.d.ts' specified in compilerOptions
