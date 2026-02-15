@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../lib/auth";
 import { Search, Package, AlertCircle, Trophy, Gift, Bell, HelpCircle } from "lucide-react";
 import LoginButton from "./LoginButton";
 import { ChatAssistant } from "./ChatAssistant";
@@ -10,6 +11,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
+  const { user } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -28,8 +30,8 @@ export default function Layout({ children }: LayoutProps) {
             </Link>
 
             <div className="hidden md:flex items-center space-x-1">
-              {[
-                { name: "Dashboard", path: "/", icon: Search },
+              {user && [
+                { name: "Dashboard", path: "/dashboard", icon: Search },
                 { name: "I Found", path: "/lost", icon: Package },
                 { name: "I Lost", path: "/found", icon: AlertCircle },
                 { name: "Leaderboard", path: "/leaderboard", icon: Trophy },
@@ -52,9 +54,11 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-2 mr-4">
                 <NotificationDropdown />
-                <button className="p-2 text-slate-400 hover:text-white transition-colors">
-                  <HelpCircle className="w-5 h-5" />
-                </button>
+                <Link to="/guidelines">
+                  <button className="p-2 text-slate-400 hover:text-white transition-colors">
+                    <HelpCircle className="w-5 h-5" />
+                  </button>
+                </Link>
               </div>
 
               <LoginButton />

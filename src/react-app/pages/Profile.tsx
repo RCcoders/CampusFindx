@@ -113,7 +113,7 @@ export default function ProfilePage() {
                                 <img src={stats.user.picture || "https://api.dicebear.com/7.x/avataaars/svg?seed=AlexRivera"} alt={stats.user.name} className="w-full h-full object-cover rounded-xl" />
                             </div>
                             <div className="absolute -bottom-2 -right-2 bg-[#6D28D9] text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#0B0C15]">
-                                LVL {Math.floor(stats.user.reputation_points / 100) + 1}
+                                LVL {Math.floor(stats.user.reputation_points / 25)}
                             </div>
                         </div>
 
@@ -272,20 +272,100 @@ export default function ProfilePage() {
 
                     {/* Badges */}
                     <div className="bg-[#0F1016] rounded-2xl p-6 border border-white/5 shadow-lg">
-                        <h2 className="text-xl font-bold text-white mb-6">Badges Earned</h2>
-                        <div className="grid grid-cols-2 gap-4">
+                        <h2 className="text-xl font-bold text-white mb-6">Current Rank Badge</h2>
+
+                        {(() => {
+                            const karma = stats.user.reputation_points;
+
+                            if (karma === 0) {
+                                return (
+                                    <div className="flex flex-col items-center justify-center p-6 text-center">
+                                        <div className="w-48 h-48 mb-4 border-4 border-dashed border-white/10 rounded-full flex items-center justify-center bg-white/5">
+                                            <Shield className="w-16 h-16 text-slate-600 opacity-50" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-slate-500 uppercase tracking-wider mb-2">No Badge Yet</h3>
+                                        <p className="text-sm text-slate-400 max-w-xs">
+                                            Do Karma (find items, help others) to earn your first badge!
+                                        </p>
+
+                                        <div className="w-full max-w-xs mt-6">
+                                            <div className="flex justify-between text-[10px] text-slate-500 mb-1 uppercase font-bold tracking-wider">
+                                                <span>Progress to Trustworthy</span>
+                                                <span>0/500</span>
+                                            </div>
+                                            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                                <div className="h-full bg-slate-800 w-0"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            }
+
+                            let badgeImage = "/badges/badge1.png";
+                            let badgeName = "Trustworthy";
+
+                            if (karma >= 2500) {
+                                badgeImage = "/badges/badge6.png";
+                                badgeName = "Lost & Found Legend";
+                            } else if (karma >= 2000) {
+                                badgeImage = "/badges/badge5.png";
+                                badgeName = "Top Finder";
+                            } else if (karma >= 1500) {
+                                badgeImage = "/badges/badge4.png";
+                                badgeName = "Campus Guardian";
+                            } else if (karma >= 1000) {
+                                badgeImage = "/badges/badge3.png";
+                                badgeName = "Helper Hero";
+                            } else if (karma >= 500) {
+                                badgeImage = "/badges/badge2.png";
+                                badgeName = "Honesty Champion";
+                            }
+
+                            return (
+                                <div className="flex flex-col items-center justify-center p-6">
+                                    <div className="relative w-48 h-48 mb-4 transition-transform hover:scale-105 duration-300">
+                                        <img src={badgeImage} alt={badgeName} className="relative z-10 w-full h-full object-contain drop-shadow-2xl" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white uppercase tracking-wider mb-1 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">{badgeName}</h3>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <span className="text-xs font-mono text-slate-400 bg-black/30 px-3 py-1 rounded-full border border-white/5">
+                                            Current Karma: <span className="text-primary">{karma}</span>
+                                        </span>
+                                    </div>
+
+                                    {/* Progress to next badge */}
+                                    {karma < 2500 && (
+                                        <div className="w-full max-w-xs mt-6">
+                                            <div className="flex justify-between text-[10px] text-slate-500 mb-1 uppercase font-bold tracking-wider">
+                                                <span>Progress to next rank</span>
+                                                <span>{karma % 500}/500</span>
+                                            </div>
+                                            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-gradient-to-r from-primary to-purple-500 transition-all duration-1000"
+                                                    style={{ width: `${(karma % 500) / 500 * 100}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })()}
+
+                        {/* Existing Badges (Hidden or kept as "Collected Badges" if needed, but user asked to display THE badge) */}
+                        {/* 
+                        <div className="grid grid-cols-2 gap-4 mt-8 opacity-50">
                             {stats.badges.length > 0 ? stats.badges.map((badge: any) => {
                                 const Icon = getIcon(badge.icon_name);
                                 return (
-                                    <div key={badge.id} className="flex flex-col items-center justify-center p-4 rounded-xl border border-primary/20 bg-primary/5 transition-transform hover:scale-105 cursor-pointer">
+                                    <div key={badge.id} className="flex flex-col items-center justify-center p-4 rounded-xl border border-primary/20 bg-primary/5">
                                         <Icon className="w-8 h-8 text-primary mb-2" />
                                         <span className="text-xs font-bold text-white uppercase tracking-wider">{badge.name}</span>
                                     </div>
                                 )
-                            }) : (
-                                <div className="col-span-2 text-center text-slate-500 py-4">No badges yet</div>
-                            )}
+                            }) : null}
                         </div>
+                        */}
                     </div>
                 </div>
 

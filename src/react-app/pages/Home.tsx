@@ -1,15 +1,40 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, Package, ArrowRight, Clock, ShieldCheck, MapPin, Trophy, Activity } from "lucide-react";
 import Layout from "../components/Layout";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { stubFoundItems } from "../data/stub-items";
 import { useAuth } from "../lib/auth";
+
+interface FoundItem {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  image_url: string | null;
+  created_at: string;
+}
 
 export default function HomePage() {
   const { user } = useAuth();
-  const recentFound = stubFoundItems.slice(0, 4);
+  const [recentFound, setRecentFound] = useState<FoundItem[]>([]);
+
+  useEffect(() => {
+    const fetchRecentItems = async () => {
+      try {
+        const response = await fetch("/api/items/found");
+        if (response.ok) {
+          const data = await response.json();
+          // Sort by creation date descending if not already sorted, and take top 4
+          setRecentFound(data.slice(0, 4));
+        }
+      } catch (error) {
+        console.error("Failed to fetch recent items:", error);
+      }
+    };
+    fetchRecentItems();
+  }, []);
 
   return (
     <Layout>
@@ -44,6 +69,11 @@ export default function HomePage() {
               <div>
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Karma Score</div>
                 <div className="text-lg font-black text-white leading-none">{user?.reputation_points || 0}</div>
+              </div>
+              <div className="h-8 w-px bg-white/10 mx-1"></div>
+              <div>
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Level</div>
+                <div className="text-lg font-black text-white leading-none">{Math.floor((user?.reputation_points || 0) / 25)}</div>
               </div>
             </div>
           </div>
@@ -117,14 +147,14 @@ export default function HomePage() {
             </div>
 
             <div className="grid md:grid-cols-4 gap-6">
-              {recentFound.map((item, i) => (
+              {recentFound.map((item) => (
                 <Link key={item.id} to={`/item/${item.id}`} className="group relative block">
                   <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
                   <Card className="bg-[#13141F] border-white/5 overflow-hidden group-hover:border-primary/50 transition-all duration-300 h-full relative z-10 flex flex-col">
                     <div className="relative h-48 bg-[#0B0C15] overflow-hidden">
-                      {item.imageUrl ? (
+                      {item.image_url ? (
                         <img
-                          src={item.imageUrl}
+                          src={item.image_url}
                           alt={item.title}
                           className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                         />
@@ -157,7 +187,7 @@ export default function HomePage() {
                       <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
                         <div className="flex items-center text-xs text-slate-400">
                           <Clock className="w-3 h-3 mr-1.5" />
-                          <span>{i * 15 + 2}m ago</span>
+                          <span>{new Date(item.created_at).toLocaleDateString()}</span>
                         </div>
                         <div className="flex items-center text-xs text-slate-400">
                           <MapPin className="w-3 h-3 mr-1.5" />

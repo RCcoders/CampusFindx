@@ -86,6 +86,12 @@ export default function LoginButton() {
                   {extendedUser.reputation_points}
                 </span>
               </div>
+              <div className="flex justify-between items-center mt-1">
+                <span>Level</span>
+                <span className="font-bold text-purple-600">
+                  {Math.floor(extendedUser.reputation_points / 25)}
+                </span>
+              </div>
             </DropdownMenuLabel>
           </>
         )}

@@ -13,7 +13,7 @@ export type Variables = {
     user: User;
 };
 
-export const getSupabase = (c: Context<{ Bindings: Bindings }>, useServiceRole = false) => {
+export const getSupabase = (c: Context<{ Bindings: Bindings; Variables: any }>, useServiceRole = false) => {
     const key = useServiceRole ? c.env.SUPABASE_SERVICE_ROLE_KEY : c.env.SUPABASE_ANON_KEY;
     const options: any = {
         auth: {
