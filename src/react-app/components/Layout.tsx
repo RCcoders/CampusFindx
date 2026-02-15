@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../lib/auth";
-import { Search, Package, AlertCircle, Trophy, Gift, Bell, HelpCircle } from "lucide-react";
+import { Search, Package, AlertCircle, Trophy, Gift, HelpCircle } from "lucide-react";
 import LoginButton from "./LoginButton";
 import { ChatAssistant } from "./ChatAssistant";
 import { NotificationDropdown } from "./NotificationDropdown";

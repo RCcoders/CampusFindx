@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Search, Package, MapPin, Loader2, ArrowUpRight } from "lucide-react";
+import { Search, Package, MapPin, Loader2, ArrowUpRight, Plus, Calendar } from "lucide-react";
 import Layout from "../components/Layout";
 import { Button } from "../components/ui/button";
 
@@ -44,7 +44,7 @@ export default function FoundItemsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
-  const [dateRange, setDateRange] = useState([0, 100]);
+  const [dateRange, setDateRange] = useState([0, 90]); // 0 to 90 days default
 
   const categories = [
     { id: "all", label: "All Items" },
@@ -64,7 +64,7 @@ export default function FoundItemsPage() {
 
   useEffect(() => {
     filterItems();
-  }, [items, searchQuery, selectedCategory]);
+  }, [items, searchQuery, selectedCategory, dateRange]);
 
   const fetchFoundItems = async () => {
     try {
@@ -92,6 +92,8 @@ export default function FoundItemsPage() {
 
   const filterItems = () => {
     let filtered = items;
+
+    // Search Filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(item =>
@@ -100,9 +102,19 @@ export default function FoundItemsPage() {
         item.location.toLowerCase().includes(query)
       );
     }
+
+    // Category Filter
     if (selectedCategory !== "all") {
       filtered = filtered.filter(item => item.category === selectedCategory);
     }
+
+    // Date Filter (Days Ago)
+    if (dateRange[1] < 90) { // If max is less than max allowed, filter
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - dateRange[1]);
+      filtered = filtered.filter(item => new Date(item.date_found_or_lost) >= cutoffDate);
+    }
+
     setFilteredItems(filtered);
   };
 
@@ -120,11 +132,18 @@ export default function FoundItemsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
           {/* Hero / Header */}
-          <div className="mb-12">
-            <h1 className="text-5xl font-black text-white mb-4 tracking-tighter">Found Registry</h1>
-            <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
-              Items secured by the community. Validated items are stored in our <span className="text-secondary font-bold">Secure Lockers</span> until claimed.
-            </p>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+            <div>
+              <h1 className="text-5xl font-black text-white mb-4 tracking-tighter">Found Registry</h1>
+              <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
+                Items secured by the community. Validated items are stored in our <span className="text-secondary font-bold">Secure Lockers</span> until claimed.
+              </p>
+            </div>
+            <Button asChild size="lg" className="bg-secondary text-black hover:bg-emerald-400 font-bold rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all">
+              <Link to="/upload-found" className="flex items-center">
+                <Plus className="mr-2 w-5 h-5" /> Report Found Item
+              </Link>
+            </Button>
           </div>
 
           {/* Filter Bar Container */}
@@ -154,19 +173,22 @@ export default function FoundItemsPage() {
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Date Range</label>
-                  <Badge variant="outline" className="text-[10px] border-secondary/30 text-secondary bg-secondary/5">All Time</Badge>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center">
+                    <Calendar className="w-3 h-3 mr-2" /> Timeframe
+                  </label>
+                  <Badge variant="outline" className="text-[10px] border-secondary/30 text-secondary bg-secondary/5">
+                    {dateRange[1] >= 90 ? "All Time" : `Last ${dateRange[1]} Days`}
+                  </Badge>
                 </div>
                 <div className="h-16 bg-[#13141F] border border-white/10 rounded-2xl px-6 flex items-center">
                   <Slider
-                    defaultValue={[0, 100]}
-                    max={100}
+                    defaultValue={[90]}
+                    max={90}
                     step={1}
-                    value={dateRange}
-                    onValueChange={setDateRange}
+                    value={[dateRange[1]]}
+                    onValueChange={(val) => setDateRange([0, val[0]])}
                     className="w-full"
                   />
-                  {/* Note: Slider color would need utility class override or theme variable adjustment for Green */}
                 </div>
               </div>
             </div>

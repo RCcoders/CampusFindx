@@ -74,7 +74,7 @@ profile.get("/me/stats", authMiddleware, async (c) => {
     const localUser = await syncUser(authUser, supabase);
 
     // Calculate Rank (simple count of users with more reputation)
-    const { count, error: rankError } = await supabase
+    const { count } = await supabase
         .from("users")
         .select("id", { count: "exact", head: true })
         .gt("reputation_points", localUser.reputation_points);

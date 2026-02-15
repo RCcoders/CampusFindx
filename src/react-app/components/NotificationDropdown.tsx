@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { Bell, Check, Loader2, Info, AlertTriangle, CheckCircle } from "lucide-react";
+import { Bell, Info, AlertTriangle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 import { useAuth } from "../lib/auth";
-import { Button } from "./ui/button";
 
 interface Notification {
     id: number;
@@ -20,7 +19,6 @@ export function NotificationDropdown() {
     const { user, session } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [notifications, setNotifications] = useState<Notification[]>([]);
-    const [loading, setLoading] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
     const dropdownRef = useRef<HTMLDivElement>(null);
 

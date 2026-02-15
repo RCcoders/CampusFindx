@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import { Loader2, Image as ImageIcon, AlertCircle } from "lucide-react";
+import { Loader2, Image as ImageIcon } from "lucide-react";
 import { cn } from "../lib/utils";
 
 interface SecureImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {

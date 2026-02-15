@@ -121,7 +121,6 @@ items.post("/:id/claim", authMiddleware, async (c) => {
     const itemId = c.req.param("id");
     const user = c.get("user");
     const { proofDescription } = await c.req.json<any>();
-    const authHeader = c.req.header("Authorization");
 
     if (!proofDescription) {
         return c.json({ error: "Proof description is required" }, 400);

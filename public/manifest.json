@@ -1,0 +1,21 @@
+{
+    "short_name": "Campus Finder",
+    "name": "Campus Finder: Secure Lost & Found",
+    "icons": [
+        {
+            "src": "/logo/logo.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/logo/logo.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#05060A",
+    "display": "standalone",
+    "theme_color": "#10B981",
+    "description": "Secure lost and found system for campus communities"
+}
