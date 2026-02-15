@@ -235,7 +235,7 @@ export default function FoundItemsPage() {
               <p className="text-slate-500">Try adjusting your filters or keywords.</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
               {filteredItems.map((item) => (
                 <div key={item.id} className="group relative bg-[#0E0F19] border border-white/5 rounded-3xl overflow-hidden hover:border-secondary/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] flex flex-col">
                   {/* Image Area */}

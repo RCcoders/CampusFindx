@@ -4,6 +4,8 @@ import { Search, Package, AlertCircle, Trophy, Gift, HelpCircle } from "lucide-r
 import LoginButton from "./LoginButton";
 import { ChatAssistant } from "./ChatAssistant";
 import { NotificationDropdown } from "./NotificationDropdown";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,6 +14,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const { user } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -63,11 +66,61 @@ export default function Layout({ children }: LayoutProps) {
 
               <LoginButton />
 
-              {/* Mobile upload button explicitly shown if needed, otherwise handled by LoginButton or separate calls */}
+              {/* Mobile Menu Toggle */}
+              <button
+                className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Navigation Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-[#0B0C15]/95 backdrop-blur-xl md:hidden pt-24 px-6 flex flex-col space-y-6 animate-in fade-in slide-in-from-top-10 duration-200">
+          {user && [
+            { name: "Dashboard", path: "/dashboard", icon: Search },
+            { name: "I Found", path: "/lost", icon: Package },
+            { name: "I Lost", path: "/found", icon: AlertCircle },
+            { name: "Leaderboard", path: "/leaderboard", icon: Trophy },
+            { name: "Reports", path: "/profile", icon: Gift },
+          ].map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`flex items-center space-x-4 p-4 rounded-2xl text-lg font-bold transition-all ${isActive(item.path)
+                ? "bg-primary/10 text-primary border border-primary/20"
+                : "text-slate-400 hover:bg-white/5 hover:text-white"
+                }`}
+            >
+              <item.icon className={`w-6 h-6 ${isActive(item.path) ? "text-primary" : "text-slate-500"}`} />
+              <span>{item.name}</span>
+            </Link>
+          ))}
+
+          <div className="pt-6 border-t border-white/10 flex flex-col space-y-4">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5">
+              <span className="text-slate-400 font-medium">Notifications</span>
+              <div className="scale-125 origin-right">
+                <NotificationDropdown />
+              </div>
+            </div>
+
+            <Link
+              to="/guidelines"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center space-x-4 p-4 rounded-2xl text-lg font-bold text-slate-400 hover:bg-white/5 hover:text-white"
+            >
+              <HelpCircle className="w-6 h-6 text-slate-500" />
+              <span>Guidelines / Help</span>
+            </Link>
+          </div>
+        </div>
+      )}
 
       <main className="pt-16 min-h-screen">{children}</main>
       <ChatAssistant />
